@@ -1,0 +1,52 @@
+import subprocess
+import sqlalchemy 
+
+imgDir = 'C:\\Users\\GODWIN MALIYEKKAL\\OneDrive\\Desktop\\scarperVS\\Google_Images\\'
+extensionName = ".jpg"
+exeProcess = "hachoir-metadata"
+
+yourusername = "codebind"
+yourpassword = "Godwin@2001"
+
+engine = sqlalchemy.create_engine(
+      "mysql+pymysql://codebind:Godwin@2001@localhost/?host=localhost?port=3306")
+
+engine.c
+cursor = mydb.cursor()
+
+Coloumns = ["Name","Image Path","Endianness","MIME type","Compression","Pixel format","Bits/pixel","Image height","Image width"]
+    
+cursor.execute('CREATE TABLE IF NOT EXISTS metadata (Name varchar(255),Image Path varchar(255),Endianness varchar(255), MIME type varchar(255), Compression varchar(255) ,Pixel format varchar (255) , Bits/pixel  int,Image height int ,Image width int) ;')
+
+fullValuelist = ""
+
+for x in range(1,2):
+    imgPath = imgDir + "sports" + str(x) + extensionName
+    Dic = {}
+    process = subprocess.Popen([exeProcess, imgPath],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT,
+                            universal_newlines=True)
+
+    
+    for tag in process.stdout:
+        line = tag.strip().split(':')
+        if (line[0] == "Metadata") or (line[0] == "- Number of colors")  or (line[0] == "- Compression rate") or (line[0] == "- Comment"):
+            continue
+        line[0] = line[0][2:]
+        if (line[0] == "Bits/pixel") or (line[0] == "Image height")  or (line[0] == "Image width") :
+            line[1]  = int(''.join(filter(str.isdigit, line[1])))
+            Dic[line[0].strip()] = line[1]
+            continue
+
+        Dic[line[0].strip()] = line[1].strip()
+
+    Dic["Image Path"] = imgPath
+    Dic["Name"] = "sports" + str(x) + extensionName
+
+
+   
+
+"
+
+mydb.disconnect()
