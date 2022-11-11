@@ -44,9 +44,6 @@ for x in range(1,2):
     Dic["Image Path"] = imgPath
     Dic["Name"] = "sports" + str(x) + extensionName
 
-
-   
-
 "
 
 mydb.disconnect()
